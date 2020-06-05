@@ -1,0 +1,8 @@
+.preview-wrapper>img {
+  height: 400px;
+}
+
+input[type=submit] {
+  margin-top: 20px;
+  display: block;
+}
