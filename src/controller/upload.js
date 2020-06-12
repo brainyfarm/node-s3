@@ -3,11 +3,15 @@ import url from 'url';
 
 import { S3, settings } from '../helper/aws.js';
 
-const moveToS3 = (filePath, cb) => {
+const moveToS3 = (fileData, cb) => {
+  const { path, mimetype } = fileData;
+  const objectKey = `${path}`;
+
   const params = {
     Bucket: settings.bucket,
-    Body: fs.createReadStream(filePath),
-    Key: filePath
+    Body: fs.createReadStream(path),
+    Key: objectKey,
+    ContentType: mimetype
   };
 
   return S3.upload(params, (err, data) => {
@@ -35,8 +39,8 @@ const uploadFile = async (req, res) => {
         message: 'No files uploaded'
       });
     } else {
-      const { path, filename } = req.file;
-      return moveToS3(path, async (data) => {
+      const { path, mimetype, destination, filename } = req.file;
+      return moveToS3({ path, mimetype, destination }, async (data) => {
         const signedUrl = await getSignedUrl(data.key);
         return res.status(201).redirect(url.format({
           pathname: '/',
