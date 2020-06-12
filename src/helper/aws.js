@@ -9,6 +9,7 @@ const {
 const config = {
   accessKeyId: AWS_ACCESS_KEY_ID,
   secretAccessKey: AWS_ACCESS_SECRET,
+  signatureVersion: 'v4',
 };
 
 AWS.config.update(config);
